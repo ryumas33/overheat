@@ -1,6 +1,6 @@
 //20160908, for the tournament
-String mode = "mapping1"; //mapping or control + 1..3
-float margin = 0.5;
+String mode = "control1"; //mapping or control + 1..3
+float mapping_speed = 0.7;
 
 import processing.serial.*;
 import processing.opengl.*;
@@ -104,13 +104,13 @@ void serialEvent(Serial p)
     if(in_control){
       risk = 0;
       for(int i = 0; i < 10; i++){
-        risk += int(load_map[int(progress/(0.5+margin) + 10 + i)]);
+        risk += int(load_map[int(progress/mapping_speed + 10 + i)]);
       }
-      m_duty = 1 - risk / 25.0;
+      m_duty = 1 - risk / 80.0;
       //manual countermoving
       
       port.write(command0(m_duty));
-      println(m_duty);
+      print(progress/mapping_speed+"      ");println(m_duty);
     }
   }
 }
@@ -198,7 +198,7 @@ if (key == CODED) {
   if (keyCode == CONTROL){
     in_progress = true;
     if(mode == "mapping1"||mode == "mapping2"||mode == "mapping3"){
-      m_duty = 0.5 + margin;
+      m_duty = mapping_speed;
     }else if(mode == "control1"||mode == "control2"||mode == "control3"){
       in_control = true;
       m_duty = 1.0;
